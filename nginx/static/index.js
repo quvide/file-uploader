@@ -22,6 +22,8 @@ function uploadFile() {
     }
   });
 
+  $("#progress").slideDown();
+
   xhr.addEventListener("load", function(evt) {
     if (this.status == 200) {
       var response = JSON.parse(this.responseText);

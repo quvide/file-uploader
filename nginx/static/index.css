@@ -27,7 +27,6 @@ body {
   border: none;
   color: white;
   cursor: pointer;
-  margin-bottom: 1.5rem;
 }
 
 #secret {
@@ -61,4 +60,9 @@ body {
 #file-label, #secret, #upload {
   height: 2.5rem;
   font-size: 0.9rem;
+}
+
+#progress {
+  display: none;
+  margin-top: 1.5rem;
 }
