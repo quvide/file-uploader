@@ -78,7 +78,14 @@ def index():
 
     key = hashkey(str(file_id))
     redis.hset(key, "filename", filename)
-    redis.hset(key, "uploader_ip", request.environ["REMOTE_ADDR"])
+
+    ip = reqest.remote_addr
+    if "REMOTE_ADDR" in request.environ:
+        ip = request.environ["REMOTE_ADDR"]
+    elif "X-Real-IP" in request.environ:
+        ip = request.environ["X-Real-IP"]
+    redis.hset(key, "uploader_ip", ip)
+
     redis.hset(key, "time", now)
     redis.hset(key, "password", request.form["secret"])
 
@@ -92,7 +99,8 @@ def index():
 def clean_old_files():
     threading.Timer(5, clean_old_files).start()
     files = redis.zrangebyscore("files", 0, time.time() - config["max_time"])
-    print("{} files have expired, removing...".format(len(files)))
+    if files:
+        print("{} files have expired, removing...".format(len(files)))
 
     for f in files:
         filename = redis.hget(hashkey(f), "filename")
