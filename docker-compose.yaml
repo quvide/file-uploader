@@ -1,0 +1,29 @@
+version: "3"
+services:
+  redis:
+    restart: always
+    image: "redis:alpine"
+    command: redis-server --appendonly yes
+    volumes:
+      - imghost-redis:/data
+
+  backend:
+    depends_on: [redis]
+    restart: always
+    build: backend
+    volumes:
+      - imghost-files:/files
+
+  nginx:
+    depends_on: [backend]
+    restart: always
+    build: nginx
+    volumes:
+      - imghost-files:/files
+      - ./nginx/static:/static
+    ports:
+      - "127.0.0.1:9000:80"
+
+volumes:
+  imghost-files:
+  imghost-redis:
