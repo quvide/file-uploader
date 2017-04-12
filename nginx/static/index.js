@@ -39,6 +39,12 @@ function uploadFile() {
   xhr.send(formData);
 }
 
+function showFile(evt) {
+  $("#file-label").text("File selected");
+  $("#upload").slideDown();
+}
+
 $(function() {
   $("#file").submit(validatePassword);
+  $("#file-input").on("change", showFile);
 })

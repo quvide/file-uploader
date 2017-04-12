@@ -23,10 +23,11 @@ body {
 }
 
 #upload {
-  background-color: rgb(210, 77, 43);
+  background-color: rgb(90, 179, 69);
   border: none;
   color: white;
   cursor: pointer;
+  display: none;
 }
 
 #secret {
