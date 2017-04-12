@@ -1,5 +1,15 @@
-function uploadFile(evt) {
+function validatePassword(evt) {
   evt.preventDefault();
+  $.post("api/password", {"secret": $("#secret").val()}, function(response) {
+    if (response.status == 0) {
+      uploadFile();
+    } else if (response.status == 1) {
+      alert(response.error);
+    }
+  }, "json");
+}
+
+function uploadFile() {
   var formData = new FormData($("#file")[0]);
   var xhr = new XMLHttpRequest();
   xhr.upload.addEventListener("progress", function(evt) {
@@ -23,10 +33,10 @@ function uploadFile(evt) {
     }
   });
 
-  xhr.open("POST", "upload");
+  xhr.open("POST", "api/upload");
   xhr.send(formData);
 }
 
 $(function() {
-  $("#file").submit(uploadFile);
+  $("#file").submit(validatePassword);
 })

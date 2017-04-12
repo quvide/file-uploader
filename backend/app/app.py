@@ -26,9 +26,21 @@ def filepath(filename):
 def hashkey(file_id):
     return "file:" + file_id
 
-@app.route("/upload", methods=["POST"])
+def invalid_password(password):
+    return password not in config["passwords"]
+
+@app.route("/api/password", methods=["POST"])
+def password():
+    if invalid_password(request.form["secret"]):
+        return err("Invalid password")
+    else:
+        return jsonify({
+            "status": 0
+        })
+
+@app.route("/api/upload", methods=["POST"])
 def index():
-    if request.form["secret"] not in config["passwords"]:
+    if invalid_password(request.form["secret"]):
         return err("Invalid password")
 
     if "file" not in request.files:
