@@ -90,7 +90,7 @@ def index():
     })
 
 def clean_old_files():
-    threading.Timer(60, clean_old_files).start()
+    threading.Timer(5, clean_old_files).start()
     files = redis.zrangebyscore("files", 0, time.time() - config["max_time"])
     print("{} files have expired, removing...".format(len(files)))
 
