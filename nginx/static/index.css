@@ -9,6 +9,9 @@ body {
 	justify-content: center;
 	align-items: center;
 	background-color: rgb(240, 240, 240);
+	background-image: url("index.png");
+	background-size: cover;
+	margin: 0;
 	font-family: "Lato";
 }
 
