@@ -1,4 +1,4 @@
-import random, time, threading
+import random, time, threading, os
 
 from flask import Flask, jsonify, request
 app = Flask(__name__)
@@ -19,6 +19,12 @@ def err(msg):
         "status": 1,
         "error": msg
     })
+
+def filepath(filename):
+    return "/files/" + filename
+
+def hashkey(file_id):
+    return "file:" + file_id
 
 @app.route("/upload", methods=["POST"])
 def index():
@@ -51,18 +57,18 @@ def index():
         if redis.zscore("files", filename) == None:
             break
 
-    f.save("/files/{}".format(filename))
+    f.save(filepath(filename))
 
     file_id = redis.incr("file_id")
     now = time.time()
 
     redis.zadd("files", now, file_id)
 
-    hashkey = "file:" + str(file_id)
-    redis.hset(hashkey, "filename", filename)
-    redis.hset(hashkey, "uploader_ip", request.environ["REMOTE_ADDR"])
-    redis.hset(hashkey, "time", now)
-    redis.hset(hashkey, "password", request.form["secret"])
+    key = hashkey(str(file_id))
+    redis.hset(key, "filename", filename)
+    redis.hset(key, "uploader_ip", request.environ["REMOTE_ADDR"])
+    redis.hset(key, "time", now)
+    redis.hset(key, "password", request.form["secret"])
 
     print("Uploaded {}".format(filename))
 
@@ -73,7 +79,13 @@ def index():
 
 def clean_old_files():
     threading.Timer(60, clean_old_files).start()
-    n = redis.zremrangebyscore("files", 0, time.time() - config["max_time"])
-    print("Cleaned {} files".format(n))
+    files = redis.zrangebyscore("files", 0, time.time() - config["max_time"])
+    print("{} files have expired, removing...".format(len(files)))
+
+    for f in files:
+        filename = redis.hget(hashkey(f), "filename")
+        redis.zrem("files", f)
+        os.remove(filepath(filename))
+        print("Removed {}".format(filename))
 
 clean_old_files()
