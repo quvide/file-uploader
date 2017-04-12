@@ -79,7 +79,7 @@ def index():
     key = hashkey(str(file_id))
     redis.hset(key, "filename", filename)
 
-    ip = reqest.remote_addr
+    ip = request.remote_addr
     if "REMOTE_ADDR" in request.environ:
         ip = request.environ["REMOTE_ADDR"]
     elif "X-Real-IP" in request.environ:
