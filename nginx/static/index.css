@@ -1,6 +1,5 @@
 html {
   height: 100%;
-  font-size: 20px;
 }
 
 body {
@@ -15,6 +14,11 @@ body {
   font-family: "Lato";
 }
 
+p {
+  font-size: 0.8rem;
+  margin: .5rem 0;
+}
+
 .container {
   width: 15rem;
   background-color: white;
@@ -22,19 +26,48 @@ body {
   border-radius: 0.25rem;
 }
 
-#upload {
-  background-color: rgb(90, 179, 69);
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: none;
+#file-label, #secret, #time, #upload, #progress {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-#secret {
+#file-label, #secret, #time, #upload {
+  height: 2.5rem;
+  margin: .5rem 0;
+  font-size: 1rem;
+}
+
+#file-label, #secret, #time-container, #upload {
+  margin: 1rem 0;
+  display: block;
+}
+
+#secret, #time {
   border: none;
+  border-left: 1px solid #AAA;
+  border-right: 1px solid #AAA;
   padding-left: 0.5rem;
+  padding-right: 0.5rem;
   outline: none;
   border-radius: 0;
+}
+
+#file {
+  margin: -1rem 0;
+}
+
+#secret.red {
+  border-left: 1px solid rgb(195, 45, 45);
+  border-right: 1px solid rgb(195, 45, 45);
+}
+
+#secret.green {
+  border-left: 1px solid rgb(90, 179, 69);
+  border-right: 1px solid rgb(90, 179, 69);
+}
+
+#time-container {
+  display: none;
 }
 
 #file-input {
@@ -46,21 +79,18 @@ body {
 #file-label {
   background-color: rgb(65, 120, 215);
   color: white;
-  display: block;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
-#file-label, #secret, #upload, #progress {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-#file-label, #secret, #upload {
-  height: 2.5rem;
-  font-size: 0.9rem;
+#upload {
+  background-color: rgb(90, 179, 69);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none;
 }
 
 #progress {

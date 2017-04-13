@@ -1,8 +1,10 @@
-# Files will be deleted after this duration in seconds
-max_time: 3600
+# Files will be deleted after this duration in minutes without a password
+# set to under 1 to disable uploads without a password
+max_time: 5
 
 passwords:
-  - hunter2
+  hunter2:
+    max_time: 120
 
 # Allowed file extensions, checked only from filename
 allowed_extensions:
@@ -20,6 +22,11 @@ allowed_extensions:
   - bash
   - zsh
   - txt
+  - cpp
+  - h
+  - c
+  - rs
+  - pdf
 
 filename:
   # How long should the generated filename be?

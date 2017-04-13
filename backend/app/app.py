@@ -32,16 +32,27 @@ def invalid_password(password):
 @app.route("/api/password", methods=["POST"])
 def password():
     if invalid_password(request.form["secret"]):
-        return err("Invalid password")
+        if config["max_time"] >= 1:
+            return jsonify({
+                "status": 2,
+                "max_time": config["max_time"]
+            })
+        else:
+            return err("Invalid password!")
     else:
         return jsonify({
-            "status": 0
+            "status": 0,
+            "max_time": config["passwords"][request.form["secret"]]["max_time"]
         })
 
 @app.route("/api/upload", methods=["POST"])
 def index():
+    max_time = config["max_time"]
     if invalid_password(request.form["secret"]):
-        return err("Invalid password")
+        if config["max_time"] < 1:
+            return err("Invalid password")
+    else:
+        max_time = max(config["passwords"][request.form["secret"]]["max_time"], max_time)
 
     if "file" not in request.files:
         return err("No file part")
@@ -74,7 +85,11 @@ def index():
     file_id = redis.incr("file_id")
     now = time.time()
 
-    redis.zadd("files", now, file_id)
+    user_time = max_time
+    if request.form["time"]:
+        user_time = int(request.form["time"])
+
+    redis.zadd("files", now + min(user_time, max_time), file_id)
 
     key = hashkey(str(file_id))
     redis.hset(key, "filename", filename)
@@ -98,7 +113,7 @@ def index():
 
 def clean_old_files():
     threading.Timer(5, clean_old_files).start()
-    files = redis.zrangebyscore("files", 0, time.time() - config["max_time"])
+    files = redis.zrangebyscore("files", 0, time.time())
     if files:
         print("{} files have expired, removing...".format(len(files)))
 

@@ -1,17 +1,47 @@
+var fileSelected = false;
+var passwordOk = false;
+
+function updateButtonStatus() {
+  if (fileSelected && passwordOk) {
+    $("#upload").slideDown();
+  } else {
+    $("#upload").slideUp();
+  }
+}
+
+function updateTimeStatus() {
+  if (passwordOk) {
+    $("#time-container").slideDown();
+  } else {
+    $("#time-container").slideUp();
+  }
+}
+
 function validatePassword(evt) {
-  evt.preventDefault();
   $.post("api/password", {"secret": $("#secret").val()}, function(response) {
+    $("#secret").removeClass();
     if (response.status == 0) {
-      uploadFile();
+      passwordOk = true;
+      $("#secret").addClass("green");
     } else if (response.status == 1) {
-      alert(response.error);
+      passwordOk = false;
+      $("#secret").addClass("red");
+    } else if (response.status == 2) {
+      passwordOk = true;
     }
+    $("#time").attr({"placeholder": response.max_time, "max": response.max_time});
+    updateButtonStatus();
+    updateTimeStatus();
   }, "json");
 }
 
-function uploadFile() {
+function uploadFile(evt) {
+  evt.preventDefault();
+
   var formData = new FormData($("#file")[0]);
+
   var xhr = new XMLHttpRequest();
+
   xhr.upload.addEventListener("progress", function(evt) {
     if (evt.lengthComputable) {
       console.log(evt.loaded, evt.total);
@@ -41,10 +71,13 @@ function uploadFile() {
 
 function showFile(evt) {
   $("#file-label").text("File selected");
-  $("#upload").slideDown();
+  fileSelected = true;
+  updateButtonStatus();
 }
 
 $(function() {
-  $("#file").submit(validatePassword);
+  $("#file").on("submit", uploadFile);
   $("#file-input").on("change", showFile);
+  $("#secret").on("input", validatePassword);
+  validatePassword();
 })
