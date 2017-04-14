@@ -10,7 +10,7 @@ function updateButtonStatus() {
 }
 
 function updateTimeStatus() {
-  if (passwordOk) {
+  if (fileSelected && passwordOk) {
     $("#time-container").slideDown();
   } else {
     $("#time-container").slideUp();
