@@ -89,7 +89,7 @@ def index():
     if request.form["time"]:
         user_time = int(request.form["time"])
 
-    redis.zadd("files", now + min(user_time, max_time), file_id)
+    redis.zadd("files", now + 60*min(user_time, max_time), file_id)
 
     key = hashkey(str(file_id))
     redis.hset(key, "filename", filename)
