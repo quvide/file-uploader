@@ -72,6 +72,7 @@ function uploadFile(evt) {
 function showFile(evt) {
   $("#file-label").text("File selected");
   fileSelected = true;
+  updateTimeStatus();
   updateButtonStatus();
 }
 
