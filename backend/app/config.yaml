@@ -8,26 +8,55 @@ passwords:
 
 # Allowed file extensions, checked only from filename
 allowed_extensions:
+  # images
   - png
   - jpg
   - jpeg
+  - gif
+  - bmp
+  - raw
+
+  # audio
   - ogg
   - mp3
-  - mp4
+  - wav
+  - flac
+  - aac
+  - wma
+
+  # video
   - webm
+  - mp4
+  - mkv
+
+  # archives
   - zip
   - tar
   - xz
+  - 7z
+  - rar
+
+  # scripts
   - sh
   - fish
   - bash
   - zsh
+
+  # documents
   - txt
+  - pdf
+  - csv
+
+  # code
   - cpp
   - h
   - c
   - rs
-  - pdf
+
+  # misc
+  - gpg
+  - srt
+  - ass
 
 filename:
   # How long should the generated filename be?
