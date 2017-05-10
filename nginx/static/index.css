@@ -97,3 +97,17 @@ p {
   display: none;
   margin-top: 1.5rem;
 }
+
+#floater {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  border-top-left-radius: 0.25rem;
+  padding: 0.5rem;
+  opacity: 0.25;
+}
+
+#floater:hover {
+  opacity: 1;
+}
